@@ -1,137 +1,49 @@
-import express from 'express';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from "passport-local";//usuario y contrasena
-import { UserModel } from '../models/user.model.js';
-import { checkLogged, userNotLogged } from '../middlewares/auth.js';
-//import { transporter, adminEmail } from "../messages/gmail.js";
-//para encriptar contraseñas
+import express from "express";
+import passport from "passport";
+import { Strategy } from "passport-local";
+import { UserModel } from "../models/user.model.js"
 import bcrypt from 'bcrypt';
+import { transporter, adminEmail } from "../messages/gmail.js";
 import { logger } from '../loggers/index.js';
 
-//funcion para encriptar la contrase;a
-const createHash = (password)=>{
-    return bcrypt.hashSync(password,bcrypt.genSaltSync());
-};
+const LocalStrategy = Strategy;
 
 const authRouter = express.Router();
 
-//serailizar y deserailizar el usuario que se autentica
-passport.serializeUser((user,done)=>{
-    return done(null, user.id)
-});//con esta serializacion estamos guardando el id del usuario en la session, req.session.passport.user={id}
+authRouter.use(express.json());
+authRouter.use(express.urlencoded({ extended: true }))
 
-passport.deserializeUser((id,done)=>{
-    UserModel.findById(id,(error, userFound)=>{
-        return done(error, userFound)
-    })
-});//req.user=userFound
-
-//estrategia de registro del usuario
-passport.use("signupStrategy", new LocalStrategy(
-    {
-        passReqToCallback:true,
-        usernameField:"email"
-    },
-    (req,username,password, done)=>{
-        //logica de registro y autenticacion
-        //1.Verfiicar si el usuario existe en la base de datos
-        UserModel.findOne({email:username},(error, user)=>{
-            if(error) return done(null, false, {message:`Error buscando el usuario ${error}`});
-            if(user) return done(null, false, {message:"El usuario ya esta registrado"});
-            //2. si el usuario no existe, registramos al usuario, y guardamos al usuario en la db
-            const newUser = {
-                email:username,
-                password:createHash(password),
-                nombre:req.body.nombre,
-                direccion: req.body.direccion,
-                edad: req.body.edad,
-                celular:req.body.celular,
-                avatar:req.body.avatar
-            }
-            //procedemos a guardar al usuario en la base de datos
-            UserModel.create(newUser,(error, userCreated)=>{
-                //userCreated es el usuario con id generado en la db
-                if(error) return done(null, false, {message:`Error registrando el usuario ${error}`});
-                return done(null, userCreated,{message:"Usuario registrado exitosamente"})
-            })
-        })
-    }
-));
-
-authRouter.post("/api/auth/register", passport.authenticate("signupStrategy",{
-    failureRedirect:"/api/auth/registro-error",
-    failureMessage:true
-}), (req,res)=>{
-    res.send("usuario registrado y autenticado")
-    res.redirect("/home")
-});
-/*authRouter.post('/register', passport.authenticate("singupStrategy", {
-    failureRedirect: "/registro-error",
-    failureMessage: true //req.sessions.messages=[]
-}),
-    (req, res) => {
-        res.redirect("/home")
-    });*/
-
-authRouter.get("/registro-error",(req,res)=>{
-    const erroMessage = req.session.messages[0] || '';
-    req.session.messages = [];
-    res.json({error:erroMessage})
-    res.render('registro-error')
-});
-
-authRouter.post("/logout",(req,res)=>{
-    req.logOut(err=>{
-        if(err) return res.status(400).json({error:"No se pudo cerrar la sesion"});
-        req.session.destroy(err=>{
-            if(err) return res.status(400).json({error:"Error al cerrar la sesion"});
-            res.status(200).json({message:"sesion finalizada"})
-        });
-    });
-});
-
-authRouter.get("/home",(req,res)=>{
-    res.send("prueba rutas autenticacion")
-});
-
-/*const authRouter = express.Router();
-//constante de la estretegia que vamos a usar
-const LocalStrategy = Strategy;
-
-// Metodos de Auth con Bcrypt
 async function generateHashPassword(password) {
     const hashPassword = await bcrypt.hash(password, 10)
     return hashPassword
 }
 
-async function verifyPass(usuario, password) {
-    const match = await bcrypt.compare(password, usuario.password)
-    console.log(`pass login: ${password} || pass hash: ${usuario.password}`)
-    return match
-}
-
 async function addUser(usuario) {
-
     try {
-        const user = usuario
+        const user = usuario;
         const userSave = new UserModel(user);
         const savedUser = await userSave.save();
         console.log(savedUser, 'dentro de addUser()')
     } catch (error) {
-        logger(error)
-    }
-}
-async function readUser(usuario) {
-    try {
-        const userRead = await model.UserModel.findOne({email: usuario})
-        console.log(userRead, 'leido desde DB mongo')
-        return userRead
-    } catch (error) {
-        
+        //logger(error)
+        console.log(error)
     }
 }
 
-//serializacion y deserealizacion
+async function readUser(usuario) {
+    /*{
+        passReqToCallback: true;
+        usernameField: "email";
+    }*/
+    try {
+        const userRead = await model.UserModel.findOne({ email: usuario })
+        console.log(userRead, 'leido desde DB mongo')
+        return userRead
+    } catch (error) {
+        //logger(error)
+    }
+}
+
 passport.serializeUser((user, done) => {
     //return done(null, user.id);
     return done(null, user.email);
@@ -143,48 +55,7 @@ passport.deserializeUser(async (email, done) => {
     done(null, existeUsuario)
 })
 
-/*passport.deserializeUser(async (id, done) => {
-    const existeUsuario = await readUser(id);
-    done(null, existeUsuario)
-})*/
-/*passport.deserializeUser((id, done) => {
-    //verificamos si el usuario existe en la base de datos
-    UserModel.findById(id, (err, userDB) => {
-        return done(err, userDB);
-    })
-});*/
-
-
-//crear estrategias para registrar a los usuarios
-/*
-    Passport LocalStrategy, utiliza dos valores esperados llamados username y password, por lo que dentro del formulario 'login' debe contener estos dos imputs con su respectivo nombre.
-*/
-
-/*passport.use("signupStrategy", new LocalStrategy(
-    {
-        passReqToCallback: true,
-        usernameField: "email"
-    },
-    (req, username, password, done) =>{
-        console.log(`${username} ${password}`)
-        //Logica para validar si un usuario existe
-        UserModel.findOne ({email:username}, (err, userFound)=>{
-            if(err) return done (err);
-            if(userFound) return done (null,false,{message:"El usuario ya existe"})
-            const newUser = {
-                name:req.body.name,
-                email:username,
-                password:password
-            };
-            UserModel.create(newUser,(err, userCreated)=>{
-                if(err) return done(err,null,{message:"Hubo un error al registrar el usuario"})
-                return done(null,userCreated, {message:"Usuaurio creado"})
-            })
-        })
-    }))*/
-
-
-/*passport.use(new LocalStrategy(
+passport.use(new LocalStrategy(
     async function (username, password, done) {
         const existeUsuario = await readUser(username)
         if (!existeUsuario) {
@@ -201,82 +72,115 @@ passport.deserializeUser(async (email, done) => {
 ))
 
 
-/*
-authRouter.post("/login", (req, res) => {
-    const { username } = req.body;
-    if (username) {
-        //crear la sesion
-        req.session.username = username;
-        res.redirect("/perfil");
+/* passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser(async (id, done) => {
+    const existeUsuario = await readUser(id);
+    done(null, existeUsuario)
+}) */
+
+function isAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        next()
     } else {
-        res.render('login-error')
+        res.redirect('/login')
     }
-});*/
+}
 
-
-/*authRouter.post('/login', passport.authenticate('local', {
-    successRedirect: '/perfil',
-    failureRedirect: '/login-error'
-}));
+/* authRouter.use(passport.initialize());
+authRouter.use(passport.session()) */
 
 
 
-authRouter.get('/home', checkLogged, (req, res) => {
-    const datosUsuario = {
-        nombre: req.session.name,
-        email: req.session.email
-    }
-    res.render('home', { datos: datosUsuario });
+async function verifyPass(username, password) {
+    const match = await bcrypt.compare(password, username.password)
+    return match
+}
+
+authRouter.get('/', (req, res) => {
+    res.redirect('home')
 })
 
 
+authRouter.get('/register', (req, res) => {
+    //res.send('Escriba sus datos para registrarse')
+    res.render('registro')
+})
 
-
-/*authRouter.post('/register', async (req, res) => {
-    const { name, password, email } = req.body;
-
-    const newUsuario = await readUser(name)
+authRouter.post('/register', async (req, res) => {
+    const { email, password, nombre, direccion, edad, celular, avatar } = req.body;
+    const newUsuario = await readUser(email)
 
     if (newUsuario) {
+        res.send('Usuario ya existente')
         res.render('registro-error')
-       // res.redirect('registro-error')
     } else {
-        const newUser = { name, password: await generateHashPassword(password), email }
-        //UserModel.push(newUser);
+        const newUser = { email, password: await generateHashPassword(password), nombre, direccion, edad, celular, avatar }
         addUser(newUser)
+        /* const emailTemplate = `<div>
+             <h1>Datos del usuario</h1>
+             <p>Email: ${newUser.email}</p>
+             <p>Nombre: ${newUser.nombre}</p>
+             <p>Dirección: ${newUser.direccion}</p>
+             <p>Edad: ${newUser.edad}</p>
+             <p>Teléfono: ${newUser.celular}</p>
+             <p>Avatar: ${newUser.avatar}</p>
+             </div>`;
+         const mailOptions = {
+             from: 'servidor node',
+             to: adminEmail,
+             subject: 'Nuevo usuario registrado',
+             html: emailTemplate
+         };*/
+        //res.send('usuario agregado')
         res.render('login')
+        /*try {
+            await transporter.sendMail(mailOptions)
+        } catch (error) {
+            logger.error(error)
+        }*/
     }
 })
 
-authRouter.get('/perfil', checkLogged, (req, res) => {
-    /*if (!req.user.contador) {
-        req.user.contador = 1
-    } else {
-        req.user.contador++
-    }*/
- /*   const datosUsuario = {
-        nombre: req.session.name,
-        email: req.session.email
-    }
-    res.render('datos', { datos: datosUsuario });
+authRouter.get('/login', async (req, res) => {
+    //res.send('Escriba username y password')
+    res.render('login')
 })
 
-authRouter.post('/perfil', async(req, res) => {
-    const nuevoProducto = req.body;
-    const result = await productosApi.save(nuevoProducto);
-    res.redirect('/datos')
-})
-
-
-authRouter.get("/logout", (req, res) => {
-    req.session.destroy((error) => {
-        if (error) {
-            res.redirect("/")
-        } else {
-            res.render("logout")
-        }
+authRouter.post('/login', passport.authenticate('local',
+    {
+        successRedirect: 'destino',
+        failureRedirect: 'login-error'
     })
-}); */
+    )
+
+authRouter.get('/destino', (req, res) => {
+    const user = {
+        nombre: req.user.nombre,
+        telefono: req.user.celular,
+        avatar: req.user.avatar
+    }
+    res.send(`Usted inicio sesion ${JSON.stringify(user)}`)
+})
+
+authRouter.get('/login-error', (req, res) => {
+    //res.send('Error al loguearse')
+    res.render('login-error')
+})
+
+authRouter.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            throw err
+            //res.redirect("/")
+        }
+        res.send('Sesion finalizada')
+        // res.render('logout')
+    })
+})
 
 
-export {authRouter};
+
+export { authRouter };

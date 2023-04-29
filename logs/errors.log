@@ -1,0 +1,54 @@
+[2023-04-29T12:28:26.155] [ERROR] default - Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials h19-20020a9d6f93000000b006a62aac5736sm9843717otq.28 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:790:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:1548:34)
+    at SMTPConnection.<anonymous> (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:546:26)
+    at SMTPConnection._processResponse (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:953:20)
+    at SMTPConnection._onData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:755:14)
+    at TLSSocket.SMTPConnection._onSocketData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:193:44)
+    at TLSSocket.emit (node:events:527:28)
+    at addChunk (node:internal/streams/readable:315:12)
+    at readableAddChunk (node:internal/streams/readable:289:9)
+    at TLSSocket.Readable.push (node:internal/streams/readable:228:10) {
+  code: 'EAUTH',
+  response: '535-5.7.8 Username and Password not accepted. Learn more at\n' +
+    '535 5.7.8  https://support.google.com/mail/?p=BadCredentials h19-20020a9d6f93000000b006a62aac5736sm9843717otq.28 - gsmtp',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2023-04-29T12:32:12.760] [ERROR] default - Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials f2-20020a4abb02000000b0053b543b027bsm5959265oop.42 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:790:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:1548:34)
+    at SMTPConnection.<anonymous> (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:546:26)
+    at SMTPConnection._processResponse (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:953:20)
+    at SMTPConnection._onData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:755:14)
+    at TLSSocket.SMTPConnection._onSocketData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:193:44)
+    at TLSSocket.emit (node:events:527:28)
+    at addChunk (node:internal/streams/readable:315:12)
+    at readableAddChunk (node:internal/streams/readable:289:9)
+    at TLSSocket.Readable.push (node:internal/streams/readable:228:10) {
+  code: 'EAUTH',
+  response: '535-5.7.8 Username and Password not accepted. Learn more at\n' +
+    '535 5.7.8  https://support.google.com/mail/?p=BadCredentials f2-20020a4abb02000000b0053b543b027bsm5959265oop.42 - gsmtp',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2023-04-29T12:41:16.456] [ERROR] default - Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials z18-20020a05683010d200b006a32ba92994sm5948547oto.23 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:790:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:1548:34)
+    at SMTPConnection.<anonymous> (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:546:26)
+    at SMTPConnection._processResponse (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:953:20)
+    at SMTPConnection._onData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:755:14)
+    at TLSSocket.SMTPConnection._onSocketData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:193:44)
+    at TLSSocket.emit (node:events:527:28)
+    at addChunk (node:internal/streams/readable:315:12)
+    at readableAddChunk (node:internal/streams/readable:289:9)
+    at TLSSocket.Readable.push (node:internal/streams/readable:228:10) {
+  code: 'EAUTH',
+  response: '535-5.7.8 Username and Password not accepted. Learn more at\n' +
+    '535 5.7.8  https://support.google.com/mail/?p=BadCredentials z18-20020a05683010d200b006a32ba92994sm5948547oto.23 - gsmtp',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
