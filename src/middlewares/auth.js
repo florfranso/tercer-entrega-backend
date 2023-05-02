@@ -1,5 +1,5 @@
 const checkLogged = (req,res,next)=>{
-    //si el usuario tiene sesion activa
+    //si el usuario no tiene sesion activa
     if(req.isAuthenticated()){
         next();
     } else {
@@ -17,5 +17,5 @@ const userNotLogged = (req,res,next)=>{
 }
 
 
-//module.exports = {checkLogged, userNotLogged}
+
 export {checkLogged, userNotLogged}

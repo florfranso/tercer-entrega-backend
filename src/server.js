@@ -95,9 +95,9 @@ if (options.server.MODO === "CLUSTER" && cluster.isPrimary) {
         //definimos que se usara un almacenamiento externo para la sesiones.
         resave: false,
         saveUninitialized: false,
-        cookie: {
+        /* cookie: {
             maxAge: 20000 //20seg
-        }
+        } */
     }));
 
     //configurar passport

@@ -9,7 +9,8 @@ const productosApi = new Contenedor("productos.txt");
 
 productsRouter.get('/',async(req,res)=>{
     const productos = await productosApi.getAll();
-    res.send(productos);
+   // res.send(productos);
+    res.render('products')
 });
 
 
