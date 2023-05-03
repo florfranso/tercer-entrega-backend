@@ -12,7 +12,13 @@ const authRouter = express.Router();
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync());
-};
+}; 
+
+
+async function verifyPass(usuario, password) {
+    const match = await bcrypt.compare(password, usuario.password)
+    return match
+}
 
 authRouter.use(express.json());
 authRouter.use(express.urlencoded({ extended: true }))
@@ -27,7 +33,7 @@ passport.deserializeUser(async (id, done) => {
     //verificamos si el usuario existe en la base de datos
     UserModel.findById(id, (error, userDB) => {
         return done(error, userDB)
-    
+
     })
 });
 
@@ -59,10 +65,28 @@ passport.use("signupStrategy", new LocalStrategy(
                 if (error) return done(null, false, { message: `Error registrando el usuario ${error}` });
                 return done(null, userCreated, { message: "Usuario registrado exitosamente" })
             })
+            console.log(newUser);
         })
     }
 ));
 
+passport.use('loginStrategy', new LocalStrategy(
+    async function(username, password, done) 
+    {
+        const existeUsuario = await UserModel.findOne({email: username})
+       //const existeUsuario = await readUser(username)
+        if (!existeUsuario) {
+            return done(null, false)
+        } else {
+            const match = await verifyPass(existeUsuario, password)
+
+            if (!match) {
+                return done(null, false)
+            }
+            return done(null, existeUsuario)
+        }
+    }
+))
 
 authRouter.get('/', (req, res) => {
     res.redirect('/login')
@@ -78,13 +102,14 @@ authRouter.get('/register', (req, res) => {
 
 authRouter.post('/register', passport.authenticate('signupStrategy',
     {
-        successRedirect: 'perfil',
-        failureMessage: true,
-        failureRedirect: 'registro-error'
-    }
-))
+        failureRedirect: 'registro-error',
+        failureMessage: true
+    }), (req, res) => {
+        res.redirect("perfil")
+    })
 
-authRouter.get('/registro-error', (req,res)=>{
+
+authRouter.get('/registro-error', (req, res) => {
     res.render('registro-error')
 })
 
@@ -93,7 +118,7 @@ authRouter.get('/login', async (req, res) => {
     res.render('login.hbs')
 })
 
-authRouter.post('/login', passport.authenticate('signupStrategy',
+authRouter.post('/login', passport.authenticate('loginStrategy',
     {
         successRedirect: 'perfil',
         failureMessage: true,
@@ -105,19 +130,19 @@ authRouter.post('/login', passport.authenticate('signupStrategy',
 
 authRouter.get('/perfil', (req, res) => {
     const user = {
-        nombre: req.session.nombre,
-        telefono: req.session.celular,
-        avatar: req.session.avatar
+        nombre: req.user.nombre,
+        celular: req.user.celular,
+        avatar: req.user.avatar
     }
     res.render('perfil', { datos: user })
 })
 
 authRouter.get('/home', (req, res) => {
-    const datosUsuario = {
-        nombre: req.session.nombre,
+    const user = {
+        nombre: req.user.nombre,
         // email: req.session.email
     }
-    res.render('home', { datos: datosUsuario });
+    res.render('home', { datos: user });
 
 })
 

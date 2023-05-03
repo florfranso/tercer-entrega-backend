@@ -19,8 +19,8 @@ const productosApi = new Contenedor("productos.txt");
 const webRouter= express.Router();
 
 webRouter.get('/', checkLogged, (req,res)=>{
-    res.render('home',{nombre:req.session.nombre});
-});
+    res.render('home',{nombre:req.user.nombre});
+}); 
 
 
 webRouter.get('/productos',checkLogged,async(req,res)=>{
@@ -40,7 +40,7 @@ webRouter.get("/login",(req,res)=>{
 
 
 webRouter.get('/logout', (req,res)=>{
-    res.render('logout',{username:req.session.username});
+    res.render('logout',{username:req.user.username});
 });
 
 webRouter.get('/register', (req, res)=>{
@@ -55,9 +55,9 @@ webRouter.get('/login-error', (req, res)=>{
     res.render("login-error")
 })
 
-/webRouter.get('/perfil',checkLogged ,(req, res)=>{
-    res.render("perfil", {nombre:req.session.nombre},{Telefono:req.session.celu.ar},{avatar: req.session.avatar})
-}) 
+/* webRouter.get('/perfil',checkLogged ,(req, res)=>{
+    res.render("perfil", {nombre:req.user.nombre},{celular:req.user.celular},{avatar: req.user.avatar})
+})  */
 
 webRouter.get('/info', (req, res) => {
     console.log(`Argumentos de entrada: ${process.argv.slice(2)}\nSistema operativo: ${process.platform}\nVersión de node: ${process.version}\nMemoria total reservada: ${process.memoryUsage().rss}\nPath de ejecucion: ${process.cwd()}\nProcess Id: ${process.pid}\nCarpeta del proyecto: ${path.basename(__dirname)}\nNúmero de procesadores presentes en el servidor: ${numCores}`)
