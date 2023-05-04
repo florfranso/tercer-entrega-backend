@@ -3,7 +3,7 @@ import log4js from 'log4js';
 log4js.configure({
     appenders: {
         consola:{type:'console'},
-        archivoErrores:{type:'file', filename:'/logs/errors.log'},
+        archivoErrores:{type:'file', filename:'./src/logs/errors.log'},
         loggerConsola:{type:'logLevelFilter', appender:'consola', level:'info'},
         loggerErrores:{type:'logLevelFilter', appender:'archivoErrores', level:'error'}
     },

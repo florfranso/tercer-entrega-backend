@@ -1,0 +1,50 @@
+[
+  {
+      "title": "Lapiz",
+      "price": "50",
+      "thumbnail": "https://st.depositphotos.com/1741875/1378/i/450/depositphotos_13784614-stock-photo-pencil-isolated-on-pure-white.jpg",
+      "id": 1
+  },
+  {
+      "title": "Lapicera",
+      "price": "100",
+      "thumbnail": "https://www.bikabik.com.ar/wp-content/uploads/2020/07/boligrafo-bic-azul-trazo-grueso-1mm-opaco-x50-unid-D_NQ_NP_897138-MLA31037651428_062019-F-min.jpg",
+      "id": 2
+  },
+  {
+      "title": "Transportador",
+      "price": "120",
+      "thumbnail": "https://img.freepik.com/vector-gratis/regla-transportadora-aislada-plantilla-vector-fondo-blanco-escala-medicion-grado-angulo_145391-1064.jpg?w=2000",
+      "id": 3
+  },
+  {
+      "title": "Regla",
+      "price": "300",
+      "thumbnail": "https://img.freepik.com/vector-premium/regla-vector-estilo-plano_505913-532.jpg?w=2000",
+      "id": 4
+  },
+  {
+      "title": "Cartuchera",
+      "price": "500",
+      "thumbnail": "http://d3ugyf2ht6aenh.cloudfront.net/stores/834/182/products/14005-11-5593d16dae874009a816468583743863-640-0.jpg",
+      "id": 5
+  },
+  {
+      "title": "Goma",
+      "price": "100",
+      "thumbnail": "https://www.librerialarubrica.com/wp-content/uploads/2020/04/goma-de-borrar-lapiz-blanca-maped-mini-technic.jpg",
+      "id": 6
+  },
+  {
+      "title": "Fibron",
+      "price": "250",
+      "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_741226-MLA40665847667_022020-O.jpg",
+      "id": 7
+  },
+  {
+      "title": "Compas",
+      "price": "400",
+      "thumbnail": "https://www.pronor.com.ar/images/CL-355091588681883191.jpg",
+      "id": 8
+  }
+]

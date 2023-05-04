@@ -104,17 +104,37 @@ authRouter.post('/register', passport.authenticate('signupStrategy',
     {
         failureRedirect: 'registro-error',
         failureMessage: true
-    }), (req, res) => {
+    }), async(req, res) => {
         res.redirect("perfil")
-    })
+        const emailTemplate = `<div>
+            <h1>Datos del usuario</h1>
+            <p>Email: ${user.email}</p>
+            <p>Nombre: ${user.nombre}</p>
+            <p>Dirección: ${user.direccion}</p>
+            <p>Edad: ${user.edad}</p>
+            <p>Teléfono: ${user.celular}</p>
+            <p>Avatar: ${user.avatar}</p>
+            </div>`;
+        const mailOptions = {
+            from: 'servidor node',
+            to: adminEmail,
+            subject: 'Nuevo usuario registrado',
+            html: emailTemplate
+        };
+        res.send('usuario agregado')
+        try {
+            await transporter.sendMail(mailOptions)
+        } catch (error) {
+            logger.error(error)
+        } 
 
+    })
 
 authRouter.get('/registro-error', (req, res) => {
     res.render('registro-error')
 })
 
 authRouter.get('/login', async (req, res) => {
-    //res.send('Escriba username y password')
     res.render('login.hbs')
 })
 

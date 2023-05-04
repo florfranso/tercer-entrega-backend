@@ -20,9 +20,12 @@ const options = {
     sqliteDB:{
         client:"sqlite",
         connection:{
-            filename:path.join("../DB/chatdb.sqlite")
+            filename: ("/src/files/eccomerce.sqlite")
         },
         useNullAsDefault:true
+    },
+    fileSystem: {
+        path: '/src/files'
     },
 
     server:{

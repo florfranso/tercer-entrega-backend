@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "productos": [
+            {
+                "id": 2,
+                "title": "Lapicera",
+                "price": 100
+            },
+            {
+                "id": 3,
+                "title": "Transportador",
+                "price": 120
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "productos": [
+            {
+                "id": 4,
+                "title": "Regla",
+                "price": 300
+            },
+            {
+                "id": 6,
+                "title": "Goma",
+                "price": 100
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "productos": [
+            {
+                "id": 6,
+                "title": "Goma",
+                "price": 100
+            },
+            {
+                "id": 5,
+                "title": "Cartuchera",
+                "price": 500
+            }
+        ]
+    }
+]

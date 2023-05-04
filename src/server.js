@@ -1,7 +1,6 @@
 import express from 'express'
 import session from 'express-session'
 import handlebars from 'express-handlebars'
-//para trabajar con hbs traer el path de la ruta raiz, es de node
 //para poder usar los archivos de las vistas
 import path, { join } from 'path'
 //libreria para encriptar contraseña
@@ -9,7 +8,6 @@ import options from './config/databaseConfig.js';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
-//importo passport
 import passport from 'passport';
 //variables de entorno
 import dotenv from 'dotenv';
@@ -32,16 +30,12 @@ const __dirname = dirname(__filename);
 
 
 //routers
-import productsRouter from './routes/poducts.js';
+import {productsRouter} from './routes/poductsRouter.js';
 import webRouter from './routes/webRoutes.js';
 import {authRouter} from './routes/authRouter.js'
 
 
-mongoose.set('strictQuery', false);
-mongoose.connect(options.mongoDB.mongoUrlSessions, (err) => {
-    if (err) return console.log(`Error al conectarse a la db ${err}`);
-    console.log("conexion a la db exitosa :)")
-});
+
 
 //server
 const app = express();
