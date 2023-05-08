@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs'
-import config from '../config/databaseConfig.js';
+import options from '../config/databaseConfig.js';
 import { logger } from '../loggers/loggers.js';
 
 class ContenedorArchivo {
 
     constructor(ruta) {
-        this.ruta = `${config.fileSystem.path}/${ruta}`;
+        this.ruta = `${options.fileSystem.path}/${ruta}`;
     }
 
     async listar(id) {

@@ -14,4 +14,4 @@ const twilioWapp="whatsapp:+14155238886";//este el numero generado desde twilio
 const adminWapp= process.env.ADMIN_WAPP;
 
 
-module.exports = {twilioWapp, adminWapp, twilioClient};
+export {twilioWapp, adminWapp, twilioClient}

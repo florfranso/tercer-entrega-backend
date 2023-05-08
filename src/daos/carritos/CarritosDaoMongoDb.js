@@ -2,13 +2,13 @@ import ContenedorMongoDb from "../../contenedores/ContenedorMongoDb.js"
 
 class CarritosDaoMongoDb extends ContenedorMongoDb {
 
-    constructor(model){
+   /*  constructor(model){
         super(model)
     }
-}
-    /*constructor() {
+} */
+    constructor() {
         super('carritos', {
-            //email: {type: String, require: true}, 
+            email: {type: String, require: true}, 
             productos: { type: [], required: true }
         })
     }
@@ -16,6 +16,6 @@ class CarritosDaoMongoDb extends ContenedorMongoDb {
     async guardar(carrito = { productos: [] }) {
         return super.guardar(carrito)
     }
-}*/
+}
 
 export default CarritosDaoMongoDb

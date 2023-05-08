@@ -1,8 +1,12 @@
 import mongoose  from "mongoose";
 
-const cartCollection = "carts";
+const cartCollection = "carrito";
 const cartSchema = new mongoose.Schema({
-    products:{
+    email: {
+        type: String, 
+        require: true
+    }, 
+    productos:{
         type:Array,
         required:true
     }

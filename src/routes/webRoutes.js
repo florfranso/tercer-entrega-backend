@@ -1,5 +1,5 @@
 import express from 'express';
-import Contenedor from "../containers/contenedorProductos.js";
+import {ContenedorMongoDb }from '../managers/ContenedorMongoDb.js'
 import { checkLogged ,userNotLogged } from '../middlewares/auth.js';
 import path  from 'path';
 
@@ -13,9 +13,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
-//service
-const productosApi = new Contenedor("productos.txt");
-
 const webRouter= express.Router();
 
 webRouter.get('/', checkLogged, (req,res)=>{
@@ -23,20 +20,9 @@ webRouter.get('/', checkLogged, (req,res)=>{
 }); 
 
 
-webRouter.get('/productos',checkLogged,async(req,res)=>{
-   try {
-    res.render('products',{products: await productosApi.getAll()})
-   } catch (error) {
-    logger(error.message)
-   } 
-});
-
-webRouter.get("/login",(req,res)=>{
+webRouter.get("/login",userNotLogged, (req,res)=>{
     res.render("login");
 });
-/* webRouter.get("/login",userNotLogged,(req,res)=>{
-    res.render("login");
-}); */
 
 
 webRouter.get('/logout', (req,res)=>{
@@ -55,9 +41,6 @@ webRouter.get('/login-error', (req, res)=>{
     res.render("login-error")
 })
 
-/* webRouter.get('/perfil',checkLogged ,(req, res)=>{
-    res.render("perfil", {nombre:req.user.nombre},{celular:req.user.celular},{avatar: req.user.avatar})
-})  */
 
 webRouter.get('/info', (req, res) => {
     console.log(`Argumentos de entrada: ${process.argv.slice(2)}\nSistema operativo: ${process.platform}\nVersión de node: ${process.version}\nMemoria total reservada: ${process.memoryUsage().rss}\nPath de ejecucion: ${process.cwd()}\nProcess Id: ${process.pid}\nCarpeta del proyecto: ${path.basename(__dirname)}\nNúmero de procesadores presentes en el servidor: ${numCores}`)

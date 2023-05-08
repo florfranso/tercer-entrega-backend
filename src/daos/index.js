@@ -1,8 +1,9 @@
 import {ProductModel} from "../models/product.models.js";
 import {CartModel} from "../models/cart.models.js";
 
-let productosDao
-let carritosDao
+
+let productosDao;
+let carritosDao;
 
 switch ('mongo') {
     case 'json':
@@ -28,14 +29,7 @@ switch ('mongo') {
         productosDao = new ProductosDaoMongoDb(ProductModel)
         carritosDao = new CarritosDaoMongoDb(CartModel)
         break
-    case 'mariadb':
-const { default: ProductosDaoMariaDb } = await import('./productos/ProductosDaoMariaDb.js')
-        const { default: CarritosDaoMariaDb} = await import('./carritos/CarritosDaoMariaDb.js')
-
-        productosDao = new ProductosDaoMariaDb()
-        carritosDao = new CarritosDaoMariaDb()
-        
-        break
+    
     case 'sqlite3':
         const { default: ProductosDaoSQLite3 } = await import('./productos/ProductosDaoSQLite3.js')
         const { default: CarritosDaoSQLite3 } = await import('./carritos/CarritosDaoSQLite3.js')

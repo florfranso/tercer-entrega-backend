@@ -8,7 +8,6 @@ const checkLogged = (req,res,next)=>{
 }
 
 const userNotLogged = (req,res,next)=>{
-    //si el usuario tiene sesion activa
     if(req.session.username){
         res.redirect("/");
     } else {

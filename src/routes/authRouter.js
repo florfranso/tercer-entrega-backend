@@ -5,14 +5,14 @@ import { UserModel } from "../models/user.model.js"
 import bcrypt from 'bcrypt';
 import { transporter, adminEmail } from "../messages/gmail.js";
 import { logger } from '../loggers/index.js';
+import { checkLogged } from "../middlewares/auth.js";
 
-//const LocalStrategy = Strategy;
 
 const authRouter = express.Router();
 
 const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync());
-}; 
+};
 
 
 async function verifyPass(usuario, password) {
@@ -30,7 +30,6 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-    //verificamos si el usuario existe en la base de datos
     UserModel.findById(id, (error, userDB) => {
         return done(error, userDB)
 
@@ -44,12 +43,9 @@ passport.use("signupStrategy", new LocalStrategy(
         usernameField: "email"
     },
     (req, username, password, done) => {
-        //logica de registro y autenticacion
-        //1.Verfiicar si el usuario existe en la base de datos
         UserModel.findOne({ email: username }, (error, userDB) => {
             if (error) return done(null, false, { message: `Error buscando el usuario ${error}` });
             if (userDB) return done(null, false, { message: "El usuario ya esta registrado" });
-            //2. si el usuario no existe, registramos al usuario, y guardamos al usuario en la db
             const newUser = {
                 email: username,
                 password: createHash(password),
@@ -59,9 +55,7 @@ passport.use("signupStrategy", new LocalStrategy(
                 celular: req.body.celular,
                 avatar: req.body.avatar
             }
-            //procedemos a guardar al usuario en la base de datos
             UserModel.create(newUser, (error, userCreated) => {
-                //userCreated es el usuario con id generado en la db
                 if (error) return done(null, false, { message: `Error registrando el usuario ${error}` });
                 return done(null, userCreated, { message: "Usuario registrado exitosamente" })
             })
@@ -71,10 +65,8 @@ passport.use("signupStrategy", new LocalStrategy(
 ));
 
 passport.use('loginStrategy', new LocalStrategy(
-    async function(username, password, done) 
-    {
-        const existeUsuario = await UserModel.findOne({email: username})
-       //const existeUsuario = await readUser(username)
+    async function (username, password, done) {
+        const existeUsuario = await UserModel.findOne({ email: username })
         if (!existeUsuario) {
             return done(null, false)
         } else {
@@ -94,7 +86,6 @@ authRouter.get('/', (req, res) => {
 
 
 authRouter.get('/register', (req, res) => {
-    //res.send('Escriba sus datos para registrarse')
     const errorMsg = req.session.messages ? req.session.messages[0] : '';
     res.render('registro', { error: errorMsg });
     req.session.messages = [];
@@ -104,16 +95,16 @@ authRouter.post('/register', passport.authenticate('signupStrategy',
     {
         failureRedirect: 'registro-error',
         failureMessage: true
-    }), async(req, res) => {
+    }), async (req, res) => {
         res.redirect("perfil")
         const emailTemplate = `<div>
             <h1>Datos del usuario</h1>
-            <p>Email: ${user.email}</p>
-            <p>Nombre: ${user.nombre}</p>
-            <p>Dirección: ${user.direccion}</p>
-            <p>Edad: ${user.edad}</p>
-            <p>Teléfono: ${user.celular}</p>
-            <p>Avatar: ${user.avatar}</p>
+            <p>Email: ${req.body.email}</p>
+            <p>Nombre: ${req.bodynombre}</p>
+            <p>Dirección: ${req.body.direccion}</p>
+            <p>Edad: ${req.body.edad}</p>
+            <p>Teléfono: ${req.body.celular}</p>
+            <p>Avatar: ${req.body.avatar}</p>
             </div>`;
         const mailOptions = {
             from: 'servidor node',
@@ -126,7 +117,7 @@ authRouter.post('/register', passport.authenticate('signupStrategy',
             await transporter.sendMail(mailOptions)
         } catch (error) {
             logger.error(error)
-        } 
+        }
 
     })
 
@@ -147,8 +138,7 @@ authRouter.post('/login', passport.authenticate('loginStrategy',
     })
 )
 
-
-authRouter.get('/perfil', (req, res) => {
+authRouter.get('/perfil', checkLogged, (req, res) => {
     const user = {
         nombre: req.user.nombre,
         celular: req.user.celular,
@@ -160,19 +150,11 @@ authRouter.get('/perfil', (req, res) => {
 authRouter.get('/home', (req, res) => {
     const user = {
         nombre: req.user.nombre,
-        // email: req.session.email
+
     }
     res.render('home', { datos: user });
 
 })
-
-
-
-/* authRouter.post('/perfil', async(req, res) => {
-    const nuevoProducto = req.body;
-    const result = await productosApi.save(nuevoProducto);
-    res.redirect('/datos')
-}) */
 
 authRouter.get('/login-error', (req, res) => {
     res.render('login-error')
@@ -183,8 +165,10 @@ authRouter.get('/logout', (req, res) => {
         if (err) {
             throw err
             //res.redirect("/")
+        } const user = {
+            nombre: req.user.nombre,
         }
-        res.render('logout')
+        res.render('logout', { datos: user })
     })
 })
 

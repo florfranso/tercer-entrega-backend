@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userCollection = "users";
 
 const userSchema = new mongoose.Schema({
-    //propiedades del documento usuario
+    
     email:{
         type:String,
         required:true,
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     direccion:{
         type:String
-    }, //direccion:String
+    }, 
     edad:{
         type:Number,
         required:true

@@ -1,4 +1,4 @@
-import ContenedorArchivo from "../../contenedores/ContenedorArchivo.js"
+import ContenedorArchivo from "../../managers/ContenedorArchivo.js"
 
 class ProductosDaoArchivo extends ContenedorArchivo {
 

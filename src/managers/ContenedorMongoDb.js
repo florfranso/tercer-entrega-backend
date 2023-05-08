@@ -1,78 +1,93 @@
 import mongoose from 'mongoose'
-import { options } from '../config/databaseConfig.js'
-import { logger } from "../loggers/loggers.js";
+mongoose.set('strictQuery', true)
+import options from "../config/databaseConfig.js";
+import { logger } from "../loggers/index.js";
 
-
-mongoose.set('strictQuery', false);
 mongoose.connect(options.mongoDB.mongoUrlSessions, (err) => {
-    if (err) return console.log(`Error al conectarse a la db ${err}`);
-    logger.log("conexion a la db exitosa :)")
+    if (err) return logger.error(`Hubo un error al conectar la base de datos ${err}`);
+    logger.info("Base de datos conectada")
 });
-class ContenedorMongoDb {
 
-    constructor(productos, esquema) {
-        this.coleccion = mongoose.model(productos, esquema)
+
+class ContenedorMongoDb {
+    constructor(model) {
+        this.model = model;
     }
 
-    async guardar(producto) {
+    async listar(id) {
         try {
-            const largoArray = await this.coleccion.find({})
-            let id
-            if (largoArray == 0) {
-                id = 1
+            const object = await this.model.findById(id);
+            if (!object) {
+                return { message: `Error al buscar: no se encontró el id ${id}`, error: true };
+            } else {
+                return { message: object, error: false };
             }
-            else {
-                id = largoArray.length + 1
-            }
-            const nuevoProducto = { id: id, ...producto }
-            await this.coleccion.create(nuevoProducto)
-            return id
         } catch (error) {
-            logger.error(error);
+            return { message: `Hubo un error ${error}`, error: true };
         }
     }
 
     async listarAll() {
         try {
-            const listaTodos = await this.coleccion.find({})
-            return listaTodos;
-
+            const objects = await this.model.find();
+            return objects;
         } catch (error) {
-            logger.error(error);
+            return [];
+        }
+    }
+
+    async guardar(producto) {
+        try {
+            const leer = await this.model.find();
+            if (leer.length == 0) {
+                const id = 1;
+                const nuevoProducto = { id: id, ...producto }
+                const productAdded = await this.model.create(nuevoProducto)
+                return productAdded
+            } else {
+                const onlyIds = leer.map((producto) => producto.id)
+                const largestId = Math.max.apply(Math, onlyIds);
+                const id = largestId + 1;
+                const nuevoProducto = { id: id, ...producto }
+                const productAdded = await this.model.create(nuevoProducto)
+                return productAdded
+            }
+        } catch (error) {
+            throw new Error(`Hubo un error al crear el producto ${error.message}`)
         }
     }
 
 
-    async listar(id) {
+
+
+    async actualizar(data, id) {
         try {
-            const productoPorId = await this.coleccion.findOne({ id: id })
-            return productoPorId
+            await this.model.updateOne({ id: id }, { $set: data })
         } catch (error) {
-            logger.error(error);
+            throw new Error(`Error para actualizar el producto ${error.message}`)
         }
     }
 
 
-
-    async actualizar(id, data) {
+    async borrar(id) {
         try {
-            await this.coleccion.updateOne({ id: id }, { $set: data })
+            await this.model.deleteOne({ id: id })
         } catch (error) {
-            logger.error(error)
+            throw new Error(`Error para borrar el producto ${error.message}`)
         }
     }
 
     async borrarAll() {
         try {
-            await this.coleccion.deleteMany({})
+            await this.model.deleteMany({})
         } catch (error) {
-            logger.error(error);
+            throw new Error(`Error para borrar los productos ${error.message}`)
         }
     }
 
     async crearCarrito(email) {
         try {
-            await this.coleccion.create({ email: email })
+            await this.model.create({ email: email })
         } catch (error) {
             logger.error(error)
         }
@@ -80,7 +95,7 @@ class ContenedorMongoDb {
 
     async agregarProducto(email, carrito) {
         try {
-            await this.coleccion.updateOne({ email: email }, { $set: carrito })
+            await this.model.updateOne({ email: email }, { $set: carrito })
         } catch (error) {
             logger.error(error)
         }
@@ -88,7 +103,7 @@ class ContenedorMongoDb {
 
     async listarCarrito(email) {
         try {
-            const carrito = await this.coleccion.findOne({ email: email })
+            const carrito = await this.model.findOne({ email: email })
             return carrito
         } catch (error) {
             logger.error(error)
@@ -97,7 +112,7 @@ class ContenedorMongoDb {
 
     async borrarCarrito(email) {
         try {
-            await this.coleccion.deleteOne({ email: email })
+            await this.model.deleteOne({ email: email })
         } catch (error) {
             logger.error(error)
         }
@@ -105,13 +120,13 @@ class ContenedorMongoDb {
 
     async filtrarProductos(id) {
         try {
-            const productosFiltrados = await this.coleccion.find({}).sort({ nombre: 1 }).limit(id)
+            const productosFiltrados = await this.model.find({}).sort({ nombre: 1 }).limit(id)
             return productosFiltrados
         } catch (error) {
             logger.error(error)
         }
     }
+
 }
 
-
-export default ContenedorMongoDb
+export { ContenedorMongoDb };
