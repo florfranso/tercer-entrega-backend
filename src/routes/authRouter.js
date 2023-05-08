@@ -112,7 +112,6 @@ authRouter.post('/register', passport.authenticate('signupStrategy',
             subject: 'Nuevo usuario registrado',
             html: emailTemplate
         };
-        res.send('usuario agregado')
         try {
             await transporter.sendMail(mailOptions)
         } catch (error) {

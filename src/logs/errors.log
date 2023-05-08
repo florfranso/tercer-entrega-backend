@@ -1,1 +1,31 @@
 
+[2023-05-08T20:49:30.565] [ERROR] default - GET /login
+[2023-05-08T20:49:30.567] [ERROR] default - GET /login- ruta no encontrada
+[2023-05-08T20:49:33.920] [ERROR] default - GET /register
+[2023-05-08T20:49:33.920] [ERROR] default - GET /register- ruta no encontrada
+[2023-05-08T20:49:47.384] [ERROR] default - POST /api/auth/register
+[2023-05-08T20:49:47.385] [ERROR] default - POST /api/auth/register- ruta no encontrada
+[2023-05-08T20:49:48.190] [ERROR] default - GET /api/auth/perfil
+[2023-05-08T20:49:48.191] [ERROR] default - GET /api/auth/perfil- ruta no encontrada
+[2023-05-08T20:49:50.252] [ERROR] default - Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ed51-20020a056870b7b300b001931cb17a86sm4670367oab.27 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:790:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:1548:34)
+    at SMTPConnection.<anonymous> (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:546:26)
+    at SMTPConnection._processResponse (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:953:20)
+    at SMTPConnection._onData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:755:14)
+    at TLSSocket.SMTPConnection._onSocketData (C:\Users\Emi\Desktop\curso coder\BACKEND\tercer-preentrega\node_modules\nodemailer\lib\smtp-connection\index.js:193:44)
+    at TLSSocket.emit (node:events:527:28)
+    at addChunk (node:internal/streams/readable:315:12)
+    at readableAddChunk (node:internal/streams/readable:289:9)
+    at TLSSocket.Readable.push (node:internal/streams/readable:228:10) {
+  code: 'EAUTH',
+  response: '535-5.7.8 Username and Password not accepted. Learn more at\n' +
+    '535 5.7.8  https://support.google.com/mail/?p=BadCredentials ed51-20020a056870b7b300b001931cb17a86sm4670367oab.27 - gsmtp',
+  responseCode: 535,
+  command: 'AUTH PLAIN'
+}
+[2023-05-08T20:50:51.627] [ERROR] default - GET /api/auth/logout
+[2023-05-08T20:50:51.628] [ERROR] default - GET /api/auth/logout- ruta no encontrada
+[2023-05-08T20:50:53.815] [ERROR] default - GET /login
+[2023-05-08T20:50:53.816] [ERROR] default - GET /login- ruta no encontrada
